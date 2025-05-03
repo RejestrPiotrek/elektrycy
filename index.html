@@ -86,7 +86,7 @@
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
     $(document).ready(function () {
-    fetch('https://raw.githubusercontent.com/RejestrPiotrek/elektrycy/refs/heads/main/dane.json")
+      fetch('dane.json')
         .then(response => response.json())
         .then(data => {
           const tbody = $('#elektrycy tbody');
@@ -119,4 +119,5 @@
   </script>
 </body>
 </html>
+
 
