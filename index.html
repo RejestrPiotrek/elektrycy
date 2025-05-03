@@ -58,7 +58,7 @@
 </head>
 <body>
   <header>
-   <img src="logo RBT.png" alt="Logo Centralny Rejestr Elektryków" />
+    <img src="logo RBT.png" alt="Logo Centralny Rejestr Elektryków" />
   </header>
 
   <main>
@@ -77,7 +77,8 @@
           <th>Status</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody>
+      </tbody>
     </table>
   </main>
 
@@ -85,34 +86,37 @@
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
     $(document).ready(function () {
-      $('#elektrycy').DataTable({
-        ajax: 'dane.json',
-        columns: [
-          { data: 'lp' },
-          { data: 'imie' },
-          { data: 'nazwisko' },
-          { data: 'telefon' },
-          { data: 'email' },
-          { data: 'numer' },
-          { data: 'rodzaj' },
-          { data: 'woj' },
-          { data: 'miasto' },
-          {
-            data: 'status',
-            render: function (data) {
-              if (data.toLowerCase() === 'zweryfikowane') {
-                return '<span class="status-zweryfikowane">' + data + '</span>';
-              }
-              return data;
+      fetch('dane.json')
+        .then(response => response.json())
+        .then(data => {
+          const tbody = $('#elektrycy tbody');
+          data.forEach((elektryk, index) => {
+            const row = `<tr>
+              <td>${index + 1}</td>
+              <td>${elektryk.imie}</td>
+              <td>${elektryk.nazwisko}</td>
+              <td>${elektryk.telefon}</td>
+              <td>${elektryk.email}</td>
+              <td>${elektryk.numer_uprawnien}</td>
+              <td>${elektryk.rodzaj_uprawnien}</td>
+              <td>${elektryk.wojewodztwo}</td>
+              <td>${elektryk.miasto}</td>
+              <td class="${elektryk.status === 'Zweryfikowane' ? 'status-zweryfikowane' : ''}">${elektryk.status}</td>
+            </tr>`;
+            tbody.append(row);
+          });
+          $('#elektrycy').DataTable({
+            language: {
+              url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pl.json'
             }
-          }
-        ],
-        language: {
-          url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pl.json'
-        },
-        pageLength: 25
-      });
+          });
+        })
+        .catch(error => {
+          console.error('Błąd wczytywania danych:', error);
+          $('#elektrycy tbody').html('<tr><td colspan="10">Błąd wczytywania danych</td></tr>');
+        });
     });
   </script>
 </body>
 </html>
+
