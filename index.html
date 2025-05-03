@@ -94,7 +94,44 @@
         })
         .then(data => {
           // Jeśli DataTable już istnieje, usuń ją i wyczyść dane
-          if ($.fn.DataTable.isDataTable('#ele
+          if ($.fn.DataTable.isDataTable('#elektrycy')) {
+            $('#elektrycy').DataTable().clear().destroy();
+          }
+
+          const tbody = $('#elektrycy tbody');
+          tbody.empty();
+
+          data.forEach((elektryk, index) => {
+            const row = `<tr>
+              <td>${index + 1}</td>
+              <td>${elektryk.imie}</td>
+              <td>${elektryk.nazwisko}</td>
+              <td>${elektryk.telefon}</td>
+              <td>${elektryk.email}</td>
+              <td>${elektryk.numer}</td>
+              <td>${elektryk.rodzaj}</td>
+              <td>${elektryk.woj}</td>
+              <td>${elektryk.miasto}</td>
+              <td class="${elektryk.status === 'Zweryfikowane' ? 'status-zweryfikowane' : ''}">${elektryk.status}</td>
+            </tr>`;
+            tbody.append(row);
+          });
+
+          $('#elektrycy').DataTable({
+            language: {
+              url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pl.json'
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Błąd wczytywania danych:', error);
+          $('#elektrycy tbody').html('<tr><td colspan="10">Błąd wczytywania danych</td></tr>');
+        });
+    });
+  </script>
+</body>
+</html>
+
 
 
 
