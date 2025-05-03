@@ -13,18 +13,6 @@
   },
   {
     "lp": "2",
-    "imie": "Jan",
-    "nazwisko": "Kowalski",
-    "telefon": "600123456",
-    "email": "jan.kowalski@example.com",
-    "numer": "D/12345/2024, E/1234/2025",
-    "rodzaj": "Dozór, Eksploatacja, Pomiary",
-    "woj": "Mazowieckie",
-    "miasto": "Warszawa",
-    "status": "Zweryfikowane"
-  },
-  {
-    "lp": "3",
     "imie": "Agnieszka",
     "nazwisko": "Nowak",
     "telefon": "601234567",
@@ -36,3 +24,4 @@
     "status": "W trakcie weryfikacji"
   }
 ]
+
