@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Centralny Rejestr Elektryków</title>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f1f3f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #f1f3f4;
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid #ddd;
+      width: 100%;
+      box-sizing: border-box;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 0 0 12px 12px;
+    }
+    header img {
+      height: 240px;
+      max-width: auto;
+      background: transparent;
+    }
+    main {
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f1f1f1;
+    }
+    .dataTables_filter input {
+      width: 200px;
+    }
+    .status-zweryfikowane {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://lh7-us.googleusercontent.com/80cFRgzjTQAKDDF1e_URjrx2wktmRJ_KYRbSNXVnDB5Wzx9HtRUD3K_0rNNGbzef2LJDW8cAC5BCXj2gfsFbMpeb1DF5GNf0_5DsX8f91aCN-y8U2nYyyEyfMZ5OtIeoeHbvbNhetTR5R5DDXikoTCGMBv5VyTuzJAvOgTvwgeBRW_LIV1w0JHtTwK5krz9N9Anb1zCt?key=xmvyGvvOfkk353c1f9YJ_w" alt="Logo Centralny Rejestr Elektryków" />
+  </header>
+
+  <main>
+    <table id="elektrycy" class="display">
+      <thead>
+        <tr>
+          <th>Lp</th>
+          <th>Imię</th>
+          <th>Nazwisko</th>
+          <th>Telefon</th>
+          <th>Email</th>
+          <th>Numer uprawnień</th>
+          <th>Rodzaj uprawnień</th>
+          <th>Województwo</th>
+          <th>Miasto</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#elektrycy').DataTable({
+        ajax: 'dane.json',
+        columns: [
+          { data: 'lp' },
+          { data: 'imie' },
+          { data: 'nazwisko' },
+          { data: 'telefon' },
+          { data: 'email' },
+          { data: 'numer' },
+          { data: 'rodzaj' },
+          { data: 'woj' },
+          { data: 'miasto' },
+          {
+            data: 'status',
+            render: function (data) {
+              if (data.toLowerCase() === 'zweryfikowane') {
+                return '<span class="status-zweryfikowane">' + data + '</span>';
+              }
+              return data;
+            }
+          }
+        ],
+        language: {
+          url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pl.json'
+        },
+        pageLength: 25
+      });
+    });
+  </script>
+</body>
+</html>
