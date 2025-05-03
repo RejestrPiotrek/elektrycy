@@ -1,7 +1,7 @@
 {
   "name": "Centralny Rejestr Elektryków",
   "short_name": "Rejestr Elektryków",
-  "start_url": "/",
+  "start_url": "/elektrycy/",
   "display": "standalone",
   "background_color": "#f1f3f4",
   "theme_color": "#f1f3f4",
