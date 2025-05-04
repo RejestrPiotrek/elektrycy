@@ -34,6 +34,18 @@
     "woj": "Wielkopolskie",
     "miasto": "Poznań",
     "status": "Zweryfikowane"
+  },
+    {
+    "lp": "4",
+    "imie": "Agnieszka",
+    "nazwisko": "Nowak",
+    "telefon": "601234567",
+    "email": "agnieszka.nowak@example.com",
+    "numer": "D/54321/2023",
+    "rodzaj": "Dozór",
+    "woj": "Wielkopolskie",
+    "miasto": "Poznań",
+    "status": "weryfikacja w toku"
   }
 ]
 
