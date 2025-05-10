@@ -34,13 +34,17 @@
   <p id="result"></p>
 
   <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+  
+                                  
+import { createClient } from '@supabase/supabase-js'
+const supabaseUrl = 'https://hhtyooxjegjcrxzssxhj.supabase.co'
+const supabaseKey = process.env.SUPABASE_KEY
+      // Inicjalizacja Supabase
+const supabase = createClient(supabaseUrl, supabaseKey)
 
-    const supabaseUrl = 'https://hhtyooxjegjcrxzssxhj.supabase.co'
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhodHlvb3hqZWdqY3J4enNzeGhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUxNjIwNzEsImV4cCI6MjAzMDczODA3MX0.T3LL08AZoHkUhz-Mpx3ugZ1p95Zm6ZMB8Rk1GvB1oIc'
 
-    // Inicjalizacja Supabase
-    const supabase = createClient(supabaseUrl, supabaseKey)
+  
+ 
 
     // Dodanie nasłuchiwania na formularz
     document.getElementById('register-form').addEventListener('submit', async (e) => {
