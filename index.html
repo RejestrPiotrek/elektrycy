@@ -22,11 +22,11 @@
 <body>
   <h2>Rejestracja</h2>
   <form id="register-form">
-    <label for="first_name">Imię:</label>
-    <input type="text" id="first_name" required><br><br>
+    <label for="imie">Imię:</label>
+    <input type="text" id="imie" required><br><br>
 
-    <label for="last_name">Nazwisko:</label>
-    <input type="text" id="last_name" required><br><br>
+    <label for="nazwisko">Nazwisko:</label>
+    <input type="text" id="nazwisko" required><br><br>
 
     <button type="submit">Zarejestruj</button>
   </form>
@@ -52,14 +52,14 @@
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault()
 
-      const first_name = document.getElementById('first_name').value
-      const last_name = document.getElementById('last_name').value
+      const first_name = document.getElementById('imie').value
+      const last_name = document.getElementById('nazwisko').value
 
-      console.log('Dane do wysłania:', { first_name, last_name });
+      console.log('Dane do wysłania:', { imie, nazwisko });
 
       const { error } = await supabase
         .from('permissions')
-        .insert([{ first_name, last_name }])
+        .insert([{ imie, nazwisko }])
 
       console.log('Wynik zapytania:', error);
 
