@@ -91,11 +91,11 @@
   <form id="register-form">
     <h2>Rejestracja</h2>
 
-    <label for="imie">Imię:</label>
-    <input type="text" id="imie" required>
+    <label for="IMIE">Imię:</label>
+    <input type="text" id="IMIE" required>
 
-    <label for="nazwisko">Nazwisko:</label>
-    <input type="text" id="nazwisko" required>
+    <label for="NAZQISKO">Nazwisko:</label>
+    <input type="text" id="NAZQISKO" required>
 
     <button type="submit">Zarejestruj</button>
 
@@ -113,12 +113,12 @@
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault()
 
-      const imie = document.getElementById('imie').value
-      const nazwisko = document.getElementById('nazwisko').value
+      const IMIE = document.getElementById('IMIE').value
+      const nazwisko = document.getElementById('NAZQISKO').value
 
       const { error } = await supabase
         .from('permissions')
-        .insert([{ imie, nazwisko }])
+        .insert([{ IMIE, NAZQISKO }])
 
       const result = document.getElementById('result')
       result.classList.remove('success', 'error')
