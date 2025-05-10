@@ -5,59 +5,89 @@
   <title>Rejestracja</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    form {
+      background-color: #ffffff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
     }
 
     h2 {
       text-align: center;
       color: #333;
-    }
-
-    form {
-      background: white;
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
     }
 
     label {
       display: block;
-      margin-top: 10px;
-      font-weight: bold;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      color: #555;
+      font-weight: 600;
     }
 
-    input, select, textarea {
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    select,
+    textarea {
       width: 100%;
-      padding: 8px;
-      margin-top: 5px;
+      padding: 10px 12px;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 6px;
+      font-size: 15px;
+      transition: border 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    input[type="file"] {
+      margin-top: 10px;
     }
 
     button {
       margin-top: 20px;
-      padding: 10px 15px;
-      background-color: #007BFF;
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
       color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
       font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background-color: #0056b3;
+      background-color: #45a049;
     }
 
     #result {
       font-weight: bold;
       padding: 10px;
-      margin-top: 10px;
+      margin-top: 15px;
       text-align: center;
+      border-radius: 6px;
     }
 
     .success {
@@ -72,8 +102,9 @@
   </style>
 </head>
 <body>
-  <h2>Rejestracja</h2>
   <form id="register-form">
+    <h2>Rejestracja</h2>
+
     <label for="imie">Imię:</label>
     <input type="text" id="imie" required>
 
@@ -89,8 +120,8 @@
     <label for="nrE">Nr uprawnień E:</label>
     <input type="text" id="nrE">
 
-    <label for="nrEPom">Nr uprawnień E z pomiarami:</label>
-    <input type="text" id="nrEPom">
+    <label for="nrEPomiary">Nr uprawnień E z pomiarami:</label>
+    <input type="text" id="nrEPomiary">
 
     <label for="nrD">Nr uprawnień D:</label>
     <input type="text" id="nrD">
@@ -108,15 +139,14 @@
     <input type="tel" id="telefon">
 
     <label for="zajmujeSie">Zajmuje się:</label>
-    <textarea id="zajmujeSie"></textarea>
+    <textarea id="zajmujeSie" placeholder="Opis specjalizacji..."></textarea>
 
-    <label for="plik">Plik:</label>
+    <label for="plik">Załącz plik:</label>
     <input type="file" id="plik">
 
     <button type="submit">Zarejestruj</button>
+    <p id="result"></p>
   </form>
-
-  <p id="result"></p>
 
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
@@ -128,28 +158,56 @@
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault()
 
-      const data = {
-        imie: document.getElementById('imie').value,
-        nazwisko: document.getElementById('nazwisko').value,
-        miasto: document.getElementById('miasto').value,
-        wojewodztwo: document.getElementById('wojewodztwo').value,
-        nrE: document.getElementById('nrE').value,
-        nrEPom: document.getElementById('nrEPom').value,
-        nrD: document.getElementById('nrD').value,
-        dataWaznosci: document.getElementById('dataWaznosci').value,
-        wydanePrzez: document.getElementById('wydanePrzez').value,
-        email: document.getElementById('email').value,
-        telefon: document.getElementById('telefon').value,
-        zajmujeSie: document.getElementById('zajmujeSie').value
+      const imie = document.getElementById('imie').value
+      const nazwisko = document.getElementById('nazwisko').value
+      const miasto = document.getElementById('miasto').value
+      const wojewodztwo = document.getElementById('wojewodztwo').value
+      const nrE = document.getElementById('nrE').value
+      const nrEPomiary = document.getElementById('nrEPomiary').value
+      const nrD = document.getElementById('nrD').value
+      const dataWaznosci = document.getElementById('dataWaznosci').value
+      const wydanePrzez = document.getElementById('wydanePrzez').value
+      const email = document.getElementById('email').value
+      const telefon = document.getElementById('telefon').value
+      const zajmujeSie = document.getElementById('zajmujeSie').value
+
+      // Obsługa pliku
+      const plikInput = document.getElementById('plik');
+      let plikUrl = null;
+      if (plikInput.files[0]) {
+        const file = plikInput.files[0];
+        const { data, error } = await supabase.storage
+          .from('attachments') // Zmień na nazwę swojego bucketa
+          .upload(`permissions/${file.name}`, file);
+
+        if (error) {
+          console.error('Błąd przesyłania pliku:', error.message);
+        } else {
+          plikUrl = data?.Key;  // Link do pliku
+        }
       }
 
+      // Wstawianie danych do bazy danych
       const { error } = await supabase
         .from('permissions')
-        .insert([data])
+        .insert([{
+          imie,
+          nazwisko,
+          miasto,
+          wojewodztwo,
+          nrE,
+          nrEPomiary,
+          nrD,
+          dataWaznosci,
+          wydanePrzez,
+          email,
+          telefon,
+          zajmujeSie,
+          plik: plikUrl
+        }])
 
       const result = document.getElementById('result')
       result.classList.remove('success', 'error')
-
       if (error) {
         result.textContent = 'Błąd: ' + error.message
         result.classList.add('error')
