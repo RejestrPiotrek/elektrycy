@@ -10,8 +10,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      padding: 40px;
     }
 
     form {
@@ -20,7 +19,7 @@
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       width: 100%;
-      max-width: 400px;
+      max-width: 600px;
     }
 
     h2 {
@@ -31,27 +30,42 @@
 
     label {
       display: block;
+      margin-top: 15px;
       margin-bottom: 5px;
       color: #555;
       font-weight: 600;
     }
 
-    input[type="text"] {
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    select,
+    textarea {
       width: 100%;
       padding: 10px 12px;
-      margin-bottom: 20px;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 15px;
       transition: border 0.2s;
     }
 
-    input[type="text"]:focus {
+    input:focus, select:focus, textarea:focus {
       border-color: #4CAF50;
       outline: none;
     }
 
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    input[type="file"] {
+      margin-top: 10px;
+    }
+
     button {
+      margin-top: 20px;
       width: 100%;
       padding: 12px;
       background-color: #4CAF50;
@@ -91,14 +105,46 @@
   <form id="register-form">
     <h2>Rejestracja</h2>
 
-    <label for="IMIE">Imię:</label>
-    <input type="text" id="IMIE" required>
+    <label for="imie">Imię:</label>
+    <input type="text" id="imie" required>
 
-    <label for="NAZWISKO">Nazwisko:</label>
-    <input type="text" id="NAZWISKO" required>
+    <label for="nazwisko">Nazwisko:</label>
+    <input type="text" id="nazwisko" required>
+
+    <label for="miasto">Miasto:</label>
+    <input type="text" id="miasto">
+
+    <label for="wojewodztwo">Województwo:</label>
+    <input type="text" id="wojewodztwo">
+
+    <label for="nrE">Nr uprawnień E:</label>
+    <input type="text" id="nrE">
+
+    <label for="nrEPomiary">Nr uprawnień E z pomiarami:</label>
+    <input type="text" id="nrEPomiary">
+
+    <label for="nrD">Nr uprawnień D:</label>
+    <input type="text" id="nrD">
+
+    <label for="dataWaznosci">Data ważności:</label>
+    <input type="date" id="dataWaznosci">
+
+    <label for="wydanePrzez">Wydane przez:</label>
+    <input type="text" id="wydanePrzez">
+
+    <label for="email">Email:</label>
+    <input type="email" id="email">
+
+    <label for="telefon">Telefon:</label>
+    <input type="tel" id="telefon">
+
+    <label for="zajmujeSie">Zajmuje się:</label>
+    <textarea id="zajmujeSie" placeholder="Opis specjalizacji..."></textarea>
+
+    <label for="plik">Załącz plik:</label>
+    <input type="file" id="plik">
 
     <button type="submit">Zarejestruj</button>
-
     <p id="result"></p>
   </form>
 
@@ -107,18 +153,17 @@
 
     const supabaseUrl = 'https://hhtyooxjegjcrxzssxhj.supabase.co'
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhodHlvb3hqZWdqY3J4enNzeGhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0Njg1MjksImV4cCI6MjA2MjA0NDUyOX0.GU9qfVMMYmA6B-jKfHES6k5OvQswnUA2FADKq92k5x8'
-
     const supabase = createClient(supabaseUrl, supabaseKey)
 
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault()
 
-      const IMIE = document.getElementById('IMIE').value
-      const NAZWISKO = document.getElementById('NAZWISKO').value
+      const imie = document.getElementById('imie').value
+      const nazwisko = document.getElementById('nazwisko').value
 
       const { error } = await supabase
         .from('permissions')
-        .insert([{ IMIE, NAZWISKO }])
+        .insert([{ imie, nazwisko }])
 
       const result = document.getElementById('result')
       result.classList.remove('success', 'error')
