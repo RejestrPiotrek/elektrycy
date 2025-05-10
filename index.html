@@ -3,6 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <title>Rejestracja</title>
+  <style>
+    #result {
+      font-weight: bold;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .success {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .error {
+      background-color: #f44336;
+      color: white;
+    }
+  </style>
 </head>
 <body>
   <h2>Rejestracja</h2>
@@ -22,25 +37,34 @@
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
     const supabaseUrl = 'https://hhtyooxjegjcrxzssxhj.supabase.co'
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhodHlvb3hqZWdqY3J4enNzeGhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0Njg1MjksImV4cCI6MjA2MjA0NDUyOX0.GU9qfVMMYmA6B-jKfHES6k5OvQswnUA2FADKq92k5x8'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhodHlvb3hqZWdqY3J4enNzeGhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUxNjIwNzEsImV4cCI6MjAzMDczODA3MX0.T3LL08AZoHkUhz-Mpx3ugZ1p95Zm6ZMB8Rk1GvB1oIc'
 
+    // Inicjalizacja Supabase
     const supabase = createClient(supabaseUrl, supabaseKey)
 
+    // Dodanie nasłuchiwania na formularz
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault()
 
       const first_name = document.getElementById('first_name').value
       const last_name = document.getElementById('last_name').value
 
+      console.log('Dane do wysłania:', { first_name, last_name });
+
       const { error } = await supabase
         .from('permissions')
         .insert([{ first_name, last_name }])
 
+      console.log('Wynik zapytania:', error);
+
       const result = document.getElementById('result')
+      result.classList.remove('success', 'error'); // Reset previous styles
       if (error) {
         result.textContent = 'Błąd: ' + error.message
+        result.classList.add('error')
       } else {
         result.textContent = 'Zapisano pomyślnie!'
+        result.classList.add('success')
         document.getElementById('register-form').reset()
       }
     })
