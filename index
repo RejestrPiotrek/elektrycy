@@ -78,5 +78,73 @@
       </div>
     </form>
   </div>
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script>
+  const supabaseUrl = 'https://your-project.supabase.co'; // ⬅️ ZAMIEŃ NA SWÓJ URL
+  const supabaseKey = 'public-anon-key'; // ⬅️ ZAMIEŃ NA SWÓJ KEY
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+  const form = document.getElementById('permissionsForm');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const firstName = formData.get('firstName');
+    const lastName = formData.get('lastName');
+    const issuedBy = formData.get('issuedBy');
+    const validUntil = formData.get('validUntil');
+    const num1 = formData.get('num1');
+    const num2 = formData.get('num2');
+    const num3 = formData.get('num3');
+
+    const permissions = formData.getAll('permissions');
+    const permissionString = permissions.join(', ');
+
+    const file = formData.get('attachment');
+    let fileUrl = null;
+
+    // Upload file if provided
+    if (file && file.name) {
+      const { data, error: uploadError } = await supabase.storage
+        .from('attachments')
+        .upload(`files/${Date.now()}_${file.name}`, file);
+
+      if (uploadError) {
+        alert('Błąd przy przesyłaniu pliku: ' + uploadError.message);
+        return;
+      }
+
+      const { data: publicUrlData } = supabase
+        .storage
+        .from('attachments')
+        .getPublicUrl(data.path);
+
+      fileUrl = publicUrlData.publicUrl;
+    }
+
+    // Insert to database
+    const { error } = await supabase.from('permissions').insert([{
+      first_name: firstName,
+      last_name: lastName,
+      permissions: permissionString,
+      num1,
+      num2,
+      num3,
+      issued_by: issuedBy,
+      valid_until: validUntil,
+      file_url: fileUrl,
+    }]);
+
+    if (error) {
+      alert('Błąd przy zapisie do bazy: ' + error.message);
+    } else {
+      alert('Formularz zapisany pomyślnie!');
+      form.reset();
+    }
+  });
+</script>
+
 </body>
 </html>
