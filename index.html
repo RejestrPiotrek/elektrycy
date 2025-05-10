@@ -4,15 +4,83 @@
   <meta charset="UTF-8" />
   <title>Rejestracja</title>
   <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    form {
+      background-color: #ffffff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+      font-weight: 600;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      transition: border 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
     #result {
       font-weight: bold;
       padding: 10px;
-      margin-top: 10px;
+      margin-top: 15px;
+      text-align: center;
+      border-radius: 6px;
     }
+
     .success {
       background-color: #4CAF50;
       color: white;
     }
+
     .error {
       background-color: #f44336;
       color: white;
@@ -20,51 +88,40 @@
   </style>
 </head>
 <body>
-  <h2>Rejestracja</h2>
   <form id="register-form">
+    <h2>Rejestracja</h2>
+
     <label for="imie">Imię:</label>
-    <input type="text" id="imie" required><br><br>
+    <input type="text" id="imie" required>
 
     <label for="nazwisko">Nazwisko:</label>
-    <input type="text" id="nazwisko" required><br><br>
+    <input type="text" id="nazwisko" required>
 
     <button type="submit">Zarejestruj</button>
+
+    <p id="result"></p>
   </form>
 
-  <p id="result"></p>
-
   <script type="module">
-  
-                                  
- import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-  const supabaseUrl = 'https://hhtyooxjegjcrxzssxhj.supabase.co'
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhodHlvb3hqZWdqY3J4enNzeGhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0Njg1MjksImV4cCI6MjA2MjA0NDUyOX0.GU9qfVMMYmA6B-jKfHES6k5OvQswnUA2FADKq92k5x8' // ← Wstaw tutaj swój anon public key
+    const supabaseUrl = 'https://hhtyooxjegjcrxzssxhj.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhodHlvb3hqZWdqY3J4enNzeGhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0Njg1MjksImV4cCI6MjA2MjA0NDUyOX0.GU9qfVMMYmA6B-jKfHES6k5OvQswnUA2FADKq92k5x8'
 
-  const supabase = createClient(supabaseUrl, supabaseKey)
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
-
-
-  
- 
-
-    // Dodanie nasłuchiwania na formularz
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault()
 
       const imie = document.getElementById('imie').value
       const nazwisko = document.getElementById('nazwisko').value
 
-      console.log('Dane do wysłania:', { imie, nazwisko });
-
       const { error } = await supabase
         .from('permissions')
         .insert([{ imie, nazwisko }])
 
-      console.log('Wynik zapytania:', error);
-
       const result = document.getElementById('result')
-      result.classList.remove('success', 'error'); // Reset previous styles
+      result.classList.remove('success', 'error')
       if (error) {
         result.textContent = 'Błąd: ' + error.message
         result.classList.add('error')
