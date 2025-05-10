@@ -94,8 +94,8 @@
     <label for="IMIE">Imię:</label>
     <input type="text" id="IMIE" required>
 
-    <label for="NAZQISKO">Nazwisko:</label>
-    <input type="text" id="NAZQISKO" required>
+    <label for="NAZWISKO">Nazwisko:</label>
+    <input type="text" id="NAZWISKO" required>
 
     <button type="submit">Zarejestruj</button>
 
@@ -114,11 +114,11 @@
       e.preventDefault()
 
       const IMIE = document.getElementById('IMIE').value
-      const nazwisko = document.getElementById('NAZQISKO').value
+      const NAZWISKO = document.getElementById('NAZQISKO').value
 
       const { error } = await supabase
         .from('permissions')
-        .insert([{ IMIE, NAZQISKO }])
+        .insert([{ IMIE, NAZWISKO }])
 
       const result = document.getElementById('result')
       result.classList.remove('success', 'error')
