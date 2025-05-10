@@ -1,59 +1,49 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Rejestracja</title>
-  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 py-10">
-  <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow">
-    <h2 class="text-xl font-bold mb-4 text-gray-800">Formularz rejestracji</h2>
-    
-    <form id="registerForm" class="space-y-4">
-      <div>
-        <label class="block mb-1 font-medium text-gray-700">Imię</label>
-        <input type="text" name="firstName" required class="w-full border border-gray-300 rounded px-4 py-2">
-      </div>
-      <div>
-        <label class="block mb-1 font-medium text-gray-700">Nazwisko</label>
-        <input type="text" name="lastName" required class="w-full border border-gray-300 rounded px-4 py-2">
-      </div>
-      <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
-        Wyślij
-      </button>
-    </form>
-  </div>
+<body>
+  <h2>Rejestracja</h2>
+  <form id="register-form">
+    <label for="first_name">Imię:</label>
+    <input type="text" id="first_name" required><br><br>
 
-  <!-- Supabase SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script>
-    const supabaseUrl = 'https://hhtyooxjegjcrxzssxhj.supabase.co'; // zamień, jeśli trzeba
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhodHlvb3hqZWdqY3J4enNzeGhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0Njg1MjksImV4cCI6MjA2MjA0NDUyOX0.GU9qfVMMYmA6B-jKfHES6k5OvQswnUA2FADKq92k5x8';
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    <label for="last_name">Nazwisko:</label>
+    <input type="text" id="last_name" required><br><br>
 
-    const form = document.getElementById('registerForm');
+    <button type="submit">Zarejestruj</button>
+  </form>
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+  <p id="result"></p>
 
-      const formData = new FormData(form);
-      const firstName = formData.get('firstName');
-      const lastName = formData.get('lastName');
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-      const { error } = await supabase.from('permissions').insert([
-        {
-          first_name: firstName,
-          last_name: lastName
-        }
-      ]);
+    const supabaseUrl = 'https://hhtyooxjegjcrxzssxhj.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhodHlvb3hqZWdqY3J4enNzeGhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0Njg1MjksImV4cCI6MjA2MjA0NDUyOX0.GU9qfVMMYmA6B-jKfHES6k5OvQswnUA2FADKq92k5x8'
 
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault()
+
+      const first_name = document.getElementById('first_name').value
+      const last_name = document.getElementById('last_name').value
+
+      const { error } = await supabase
+        .from('permissions')
+        .insert([{ first_name, last_name }])
+
+      const result = document.getElementById('result')
       if (error) {
-        alert('Błąd przy zapisie: ' + error.message);
+        result.textContent = 'Błąd: ' + error.message
       } else {
-        alert('Zapisano pomyślnie!');
-        form.reset();
+        result.textContent = 'Zapisano pomyślnie!'
+        document.getElementById('register-form').reset()
       }
-    });
+    })
   </script>
 </body>
 </html>
